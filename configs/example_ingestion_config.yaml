@@ -1,0 +1,33 @@
+station:
+  path: data/raw/station_example.csv
+  time_column: timestamp
+  column_map:
+    location: location
+    distance_m: distance_m
+    temperature_k: temperature_k
+    pressure_pa: pressure_pa
+    mass_flow_kg_s: mass_flow_kg_s
+  species_map:
+    O2: O2
+    CO2: CO2
+    CO: CO
+    H2O: H2O
+  default_location: PROBE_INLET
+  default_distance_m: 0.60
+
+ftir:
+  path: data/raw/ftir_example.csv
+  time_column: timestamp
+  column_map:
+    location: location
+    distance_m: distance_m
+  species_map:
+    CO2: CO2
+    CO: CO
+    NO: NO
+    NO2: NO2
+  default_location: FTIR
+  default_distance_m: 4.00
+
+align:
+  tolerance_s: 0.6

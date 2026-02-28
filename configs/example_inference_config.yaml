@@ -1,0 +1,14 @@
+inference:
+  num_warmup: 700
+  num_samples: 1200
+  num_chains: 1
+  random_seed: 7
+  time_tolerance_s: 0.6
+comparison:
+  predicted_location: heated_ptfe_to_ftir
+  observed_location: FTIR
+  species:
+    - CO2
+    - CO
+    - NO
+    - NO2

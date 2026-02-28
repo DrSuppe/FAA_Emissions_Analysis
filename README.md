@@ -16,9 +16,25 @@ Physics-informed combustor-to-FTIR emissions analysis using Cantera.
 - `reports/`: generated figures/tables/summaries
 - `tests/`: unit + integration tests
 
-## Quick start
-1. Create environment and install dependencies.
-2. Put input files into `data/raw/`.
-3. Define case config in `configs/`.
-4. Run simulation/inference scripts from `scripts/`.
+## Pipeline quick start
+1. Install base dependencies:
+   - `python -m pip install -e .`
+2. Optional Bayesian stack:
+   - `python -m pip install -e '.[inference]'`
+3. Put source files in `data/raw/` and edit:
+   - `configs/example_ingestion_config.yaml`
+   - `configs/example_model_config.yaml`
+4. Prepare harmonized inputs:
+   - `python scripts/prepare_data.py --config configs/example_ingestion_config.yaml`
+   - Smoke test with provided synthetic files in `data/raw/`.
+5. Run forward model:
+   - `python scripts/run_forward_model.py --inlet-csv data/processed/station_harmonized.csv --model-config configs/example_model_config.yaml`
+6. Run Bayesian calibration:
+   - `python scripts/run_inference.py --predicted-csv data/processed/forward_simulation.csv --observed-csv data/processed/ftir_harmonized.csv --predicted-location heated_ptfe_to_ftir --species CO2 CO NO NO2`
+7. Generate evolution plots:
+   - `python scripts/plot_evolution.py --input-csv data/processed/forward_simulation.csv --species CO2 CO NO NO2`
 
+## Notes
+- `scripts/run_forward_model.py` expects Cantera to be installed.
+- `scripts/run_inference.py` expects JAX + NumPyro (the `inference` extra).
+- The current model is a scientifically structured scaffold (3-zone + line chain) and is designed to be calibrated with your campaign data.
