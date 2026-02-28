@@ -5,10 +5,16 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import sys
 
 import pandas as pd
 
-from faa_emissions_analysis.plotting import generate_default_figure_pack
+try:
+    from faa_emissions_analysis.plotting import generate_default_figure_pack
+except ModuleNotFoundError:
+    repo_root = Path(__file__).resolve().parents[1]
+    sys.path.insert(0, str(repo_root / "src"))
+    from faa_emissions_analysis.plotting import generate_default_figure_pack
 
 
 def parse_args() -> argparse.Namespace:
