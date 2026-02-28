@@ -1,0 +1,13 @@
+input_csv: data/processed/example_simulation.csv
+species:
+  - CO2
+  - CO
+  - NO
+  - NO2
+  - UHC
+snapshot_times_s:
+  - 0.0
+  - 10.0
+  - 20.0
+  - 40.0
+out_dir: reports/figures
