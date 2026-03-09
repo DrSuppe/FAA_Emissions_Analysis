@@ -38,3 +38,4 @@ Physics-informed combustor-to-FTIR emissions analysis using Cantera.
 - `scripts/run_forward_model.py` expects Cantera to be installed.
 - `scripts/run_inference.py` expects JAX + NumPyro (the `inference` extra).
 - The current model is a scientifically structured scaffold (3-zone + line chain) and is designed to be calibrated with your campaign data.
+- For fast code navigation (human + AI), see `docs/module_map.md`.
