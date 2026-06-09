@@ -46,16 +46,9 @@ def load_forward_model_config(path: Path) -> ForwardModelConfig:
 
     stages = tuple(parse_stage(stage) for stage in payload["stages"])
     raw_species = payload.get("tracked_species", ("O2", "N2", "CO2", "H2O", "CO", "NO", "NO2"))
-    eq = payload.get("equivalence_ratio")
     return ForwardModelConfig(
         mechanism=payload.get("mechanism", "gri30.yaml"),
         tracked_species=tuple(raw_species),
         inlet_composition=payload.get("inlet_composition", {"O2": 0.21, "N2": 0.79}),
         stages=stages,
-        # --- Reacting fuel/air inlet (HyChem A2 Jet-A; see MECHANISM_PROVENANCE.md) ---
-        fuel_composition=payload.get("fuel_composition"),
-        oxidizer_composition=payload.get("oxidizer_composition", {"O2": 0.21, "N2": 0.79}),
-        equivalence_ratio=(float(eq) if eq is not None else None),
-        t_inlet_air_k=float(payload.get("t_inlet_air_k", 700.0)),
-        inlet_pressure_pa=float(payload.get("inlet_pressure_pa", 185_000.0)),
     )
