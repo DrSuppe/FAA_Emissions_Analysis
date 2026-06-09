@@ -4,6 +4,17 @@ inference:
   num_chains: 1
   random_seed: 7
   time_tolerance_s: 0.6
+  priors:
+    # Std-dev of LogNormal prior on multiplicative sensor-sensitivity scale.
+    # LogNormal(0, 0.30) → 95% CI roughly ×0.55 – ×1.82.
+    scale_log_std: 0.30
+    # Additive bias and noise priors expressed as fractions of the per-species
+    # predicted-signal median.  Fractional scaling keeps priors well-conditioned
+    # for both major species (CO2 ≈ 10 %) and trace species (NO ≈ sub-100 ppm).
+    bias_ref_fraction: 0.05       # ±5 % absolute bias at 1σ
+    sigma_ref_fraction: 0.05      # FTIR measurement noise at 5 % of signal
+    discrepancy_ref_fraction: 0.10  # forward-model structural error at 10 % of signal
+
 comparison:
   predicted_location: heated_ptfe_to_ftir
   observed_location: FTIR

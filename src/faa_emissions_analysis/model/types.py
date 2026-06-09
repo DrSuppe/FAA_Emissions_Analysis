@@ -12,7 +12,7 @@ class RestrictionConfig:
 
     area_m2: float
     discharge_coeff: float = 0.85
-    gamma: float = 1.33
+    gamma: float | None = None  # None → computed from gas cp/cv at runtime (recommended)
     downstream_pressure_pa: float | None = None
 
 

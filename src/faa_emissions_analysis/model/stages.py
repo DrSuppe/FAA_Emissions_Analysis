@@ -26,36 +26,50 @@ class CanteraPathModel:
 
     def _advance_stage(self, state: dict[str, Any], stage: StageConfig) -> dict[str, Any]:
         ct = self.ct
+
+        # Prescribe outlet pressure before reactor init so kinetics run at the correct
+        # operating pressure (matches physical station measurements when available).
+        pressure_out = max(state["pressure_pa"] - stage.pressure_drop_pa, 1_000.0)
+
         gas = ct.Solution(self.config.mechanism)
         mixed = mix_compositions(state["composition"], stage.mix_stream, stage.mix_fraction)
-        gas.TPX = state["temperature_k"], state["pressure_pa"], mixed
+        gas.TPX = state["temperature_k"], pressure_out, mixed
 
-        reactor = ct.IdealGasConstPressureReactor(gas, energy="on")
+        reactor = ct.IdealGasConstPressureReactor(gas, energy="on", clone=False)
 
         if stage.wall_temperature_k is not None and stage.ua_w_m2_k > 0.0:
             env = ct.Solution(self.config.mechanism)
-            env.TPX = stage.wall_temperature_k, max(state["pressure_pa"], 1.0), "N2:1.0"
+            env.TPX = stage.wall_temperature_k, max(pressure_out, 1.0), "N2:1.0"
             env_res = ct.Reservoir(env)
             ct.Wall(reactor, env_res, A=max(stage.area_m2, 1e-6), U=max(stage.ua_w_m2_k, 0.0))
 
         net = ct.ReactorNet([reactor])
         net.advance(max(stage.residence_time_s, 0.0))
 
-        pressure_out = max(state["pressure_pa"] - stage.pressure_drop_pa, 1_000.0)
         gas_out = ct.Solution(self.config.mechanism)
-        gas_out.TPX = reactor.T, pressure_out, reactor.thermo.X
+        gas_out.TPX = reactor.T, pressure_out, reactor.phase.X
 
         out_state = {
             "temperature_k": float(gas_out.T),
             "pressure_pa": float(gas_out.P),
             "mass_flow_kg_s": float(state["mass_flow_kg_s"]),
-            "composition": {sp: float(gas_out[sp].X[0]) for sp in self.config.tracked_species if sp in gas_out.species_names},
+            "composition": {
+                sp: float(gas_out.X[gas_out.species_index(sp)])
+                for sp in self.config.tracked_species
+                if sp in gas_out.species_names
+            },
             "restriction_choked": False,
             "restriction_mdot_cap_kg_s": np.nan,
         }
 
         if stage.restriction is not None:
             r_spec = ct.gas_constant / max(gas_out.mean_molecular_weight, 1e-12)
+            # Use composition-derived gamma when not overridden in config.
+            gamma = (
+                float(stage.restriction.gamma)
+                if stage.restriction.gamma is not None
+                else float(gas_out.cp_mass / gas_out.cv_mass)
+            )
             p_down = stage.restriction.downstream_pressure_pa or max(gas_out.P - 100.0, 1.0)
             mdot_cap, choked = compressible_orifice_mdot(
                 p_up_pa=float(gas_out.P),
@@ -63,7 +77,7 @@ class CanteraPathModel:
                 temperature_k=float(gas_out.T),
                 area_m2=float(stage.restriction.area_m2),
                 discharge_coeff=float(stage.restriction.discharge_coeff),
-                gamma=float(stage.restriction.gamma),
+                gamma=gamma,
                 gas_constant_j_kgk=float(r_spec),
             )
             out_state["restriction_choked"] = choked

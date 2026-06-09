@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Mapping
 
-import yaml
+from faa_emissions_analysis._yaml import load_yaml
 
 from .types import ForwardModelConfig, RestrictionConfig, StageConfig
 
@@ -17,7 +17,7 @@ def parse_stage(payload: Mapping[str, Any]) -> StageConfig:
         restriction_cfg = RestrictionConfig(
             area_m2=float(restriction["area_m2"]),
             discharge_coeff=float(restriction.get("discharge_coeff", 0.85)),
-            gamma=float(restriction.get("gamma", 1.33)),
+            gamma=float(restriction["gamma"]) if restriction.get("gamma") is not None else None,
             downstream_pressure_pa=(
                 float(restriction["downstream_pressure_pa"])
                 if restriction.get("downstream_pressure_pa") is not None
@@ -42,13 +42,13 @@ def parse_stage(payload: Mapping[str, Any]) -> StageConfig:
 
 
 def load_forward_model_config(path: Path) -> ForwardModelConfig:
-    with path.open("r", encoding="utf-8") as handle:
-        payload = yaml.safe_load(handle)
+    payload = load_yaml(path)
 
     stages = tuple(parse_stage(stage) for stage in payload["stages"])
+    raw_species = payload.get("tracked_species", ("O2", "N2", "CO2", "H2O", "CO", "NO", "NO2"))
     return ForwardModelConfig(
         mechanism=payload.get("mechanism", "gri30.yaml"),
-        tracked_species=tuple(payload.get("tracked_species", ("O2", "N2", "CO2", "H2O", "CO", "NO", "NO2"))),
+        tracked_species=tuple(raw_species),
         inlet_composition=payload.get("inlet_composition", {"O2": 0.21, "N2": 0.79}),
         stages=stages,
     )

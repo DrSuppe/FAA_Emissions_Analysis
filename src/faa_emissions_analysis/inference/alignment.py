@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import warnings
 from typing import Iterable
 
 import pandas as pd
@@ -37,4 +38,15 @@ def align_predicted_and_observed(
         tolerance=tolerance_s,
         suffixes=("_obs", "_pred"),
     )
-    return aligned.dropna().reset_index(drop=True)
+    before = len(aligned)
+    result = aligned.dropna().reset_index(drop=True)
+    dropped = before - len(result)
+    if dropped > 0:
+        pct = 100.0 * dropped / before if before > 0 else 0.0
+        warnings.warn(
+            f"align_predicted_and_observed: dropped {dropped}/{before} rows ({pct:.1f} %) "
+            f"due to NaN after merge_asof (tolerance={tolerance_s} s). "
+            "Consider increasing tolerance_s or checking time coverage.",
+            stacklevel=2,
+        )
+    return result
