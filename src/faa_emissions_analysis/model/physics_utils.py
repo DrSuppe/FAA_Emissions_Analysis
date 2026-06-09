@@ -77,13 +77,28 @@ def state_from_row(
     row: pd.Series,
     species: Iterable[str],
     fallback: Mapping[str, float],
+    balance_species: str = "N2",
 ) -> dict[str, Any]:
+    """Build a reactor state from a measurement row.
+
+    Bug fix (N2 renormalization): measurement CSVs commonly report only the
+    minor/measured species (e.g. O2, CO2, CO, H2O) and OMIT the diluent/balance
+    gas (N2 ≈ 0.78 for combustion products). Renormalizing only the listed
+    species over-counts them (e.g. CO2 0.067 → ~0.30). We therefore explicitly
+    reconstruct the balance species as ``1 - sum(measured)`` before normalizing,
+    so the diluent is retained and the composition stays physical.
+    """
     composition = {}
     for sp in species:
         if sp in row.index and pd.notna(row[sp]):
-            composition[sp] = float(row[sp])
+            composition[sp] = max(float(row[sp]), 0.0)
     if not composition:
         composition = dict(fallback)
+    else:
+        measured_sum = sum(composition.values())
+        # Restore the (unmeasured) balance gas so the diluent is not dropped.
+        if balance_species not in composition and measured_sum < 1.0:
+            composition[balance_species] = 1.0 - measured_sum
 
     return {
         "temperature_k": float(row["temperature_k"]),

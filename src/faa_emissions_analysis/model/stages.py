@@ -24,6 +24,41 @@ class CanteraPathModel:
             ) from exc
         self.ct = ct
 
+    def flame_inlet_state(self) -> dict[str, Any]:
+        """Build the reacting combustor inlet (fresh fuel/air at phi).
+
+        Uses the HyChem A2 Jet-A + NOx mechanism (see MECHANISM_PROVENANCE.md).
+        The inlet is a fresh, UNBURNED fuel/air mixture set by equivalence ratio
+        via ``ct.Solution.set_equivalence_ratio`` at the configured air-preheat
+        temperature and inlet pressure. The reacting stages then ignite and burn
+        this mixture (energy='on'), so combustion products — including NO/NO2 —
+        are genuine predictions rather than pass-through of already-burned gas.
+        """
+        ct = self.ct
+        cfg = self.config
+        if cfg.fuel_composition is None or cfg.equivalence_ratio is None:
+            raise ValueError(
+                "flame_inlet_state requires fuel_composition and equivalence_ratio "
+                "to be set in the ForwardModelConfig."
+            )
+        gas = ct.Solution(cfg.mechanism)
+        gas.set_equivalence_ratio(
+            float(cfg.equivalence_ratio),
+            dict(cfg.fuel_composition),
+            dict(cfg.oxidizer_composition),
+        )
+        gas.TP = float(cfg.t_inlet_air_k), float(cfg.inlet_pressure_pa)
+        # Mass flow seeds from the validation target (station mdot ~0.18 kg/s);
+        # it is overwritten per-row in simulate_timeseries when available.
+        return {
+            "temperature_k": float(gas.T),
+            "pressure_pa": float(gas.P),
+            "mass_flow_kg_s": 0.18,
+            "composition": {
+                sp: float(gas.X[i]) for i, sp in enumerate(gas.species_names) if gas.X[i] > 0.0
+            },
+        }
+
     def _advance_stage(self, state: dict[str, Any], stage: StageConfig) -> dict[str, Any]:
         ct = self.ct
 
@@ -33,7 +68,27 @@ class CanteraPathModel:
 
         gas = ct.Solution(self.config.mechanism)
         mixed = mix_compositions(state["composition"], stage.mix_stream, stage.mix_fraction)
-        gas.TPX = state["temperature_k"], pressure_out, mixed
+
+        # Flame anchoring (pilot ignition). The HyChem A2 mechanism is HIGH-TEMPERATURE
+        # only: a fresh fuel/air premix at ~700 K compressor-discharge temperature does
+        # NOT autoignite within the few-ms stage residence time (ignition delay > 0.1 s
+        # at 700 K; ~3 ms only above ~1100 K). A real pilot does not rely on autoignition
+        # of cold premix — it is stabilized on a hot recirculation zone. We represent that
+        # by starting the reactor of an UNBURNED fuel-bearing stage at the stage wall
+        # (recirculation-zone) temperature when it is hotter than the incoming gas. This
+        # ties ignition to an EXISTING config value (pilot wall T = 1400 K), not a new
+        # free knob. See MECHANISM_PROVENANCE.md (validity range) and model/README.md.
+        start_temp = state["temperature_k"]
+        fuel_keys = set(self.config.fuel_composition or {})
+        unburned_fuel = any(float(mixed.get(fk, 0.0)) > 1e-8 for fk in fuel_keys)
+        if (
+            unburned_fuel
+            and stage.wall_temperature_k is not None
+            and stage.wall_temperature_k > start_temp
+        ):
+            start_temp = float(stage.wall_temperature_k)
+
+        gas.TPX = start_temp, pressure_out, mixed
 
         reactor = ct.IdealGasConstPressureReactor(gas, energy="on", clone=False)
 
@@ -97,8 +152,26 @@ class CanteraPathModel:
         rows: list[dict[str, Any]] = []
         tracked = list(self.config.tracked_species)
 
+        # When a reacting fuel/air inlet is configured, every trajectory is
+        # seeded with the SAME fresh fuel/air mixture (set by phi). The station
+        # CSV is then the VALIDATION TARGET downstream, not the inlet — it only
+        # supplies timestamp/time_s and the measured mass flow for transport.
+        reacting = (
+            self.config.fuel_composition is not None
+            and self.config.equivalence_ratio is not None
+        )
+        flame_inlet = self.flame_inlet_state() if reacting else None
+
         for _, row in inlet_df.sort_values("time_s").iterrows():
-            state = state_from_row(row, tracked, self.config.inlet_composition)
+            if reacting:
+                state = {
+                    "temperature_k": flame_inlet["temperature_k"],
+                    "pressure_pa": flame_inlet["pressure_pa"],
+                    "mass_flow_kg_s": float(row["mass_flow_kg_s"]),
+                    "composition": dict(flame_inlet["composition"]),
+                }
+            else:
+                state = state_from_row(row, tracked, self.config.inlet_composition)
             for stage in self.config.stages:
                 state = self._advance_stage(state, stage)
                 rec: dict[str, Any] = {

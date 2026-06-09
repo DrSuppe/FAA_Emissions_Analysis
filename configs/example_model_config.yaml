@@ -1,4 +1,7 @@
-mechanism: gri30.yaml
+# Reacting forward model: HyChem A2 Jet-A (POSF10325) + NOx skeletal mechanism.
+# Provenance + citation: mechanisms/MECHANISM_PROVENANCE.md
+# Saggese et al., Combust. Flame 212 (2020) 270-278; Glarborg et al., PECS 67 (2018) 31-68.
+mechanism: mechanisms/A2NOx_skeletal.yaml
 tracked_species:
   - O2
   - N2
@@ -7,6 +10,32 @@ tracked_species:
   - CO
   - NO
   - NO2
+
+# --- Reacting fuel/air inlet ---------------------------------------------------
+# The combustor inlet is a FRESH (unburned) fuel/air mixture set by equivalence
+# ratio. fuel = lumped HyChem pseudo-species POSF10325 (C11H22). The reacting
+# stages (pilot_primary/secondary/main_zone) burn this mixture; the station CSV
+# (PROBE_INLET, 1080 K) is the VALIDATION TARGET, not the inlet.
+fuel_composition:
+  POSF10325: 1.0
+oxidizer_composition:
+  O2: 0.21
+  N2: 0.79
+# Best-fit phi from calibrating predicted post-main-zone O2/CO2/H2O/CO against
+# the station target (scripts/calibrate_phi.py; see model/README.md "Calibration").
+# phi=0.64 minimizes the relative SSR over (O2, CO2, H2O, CO). The fit is limited
+# by the SYNTHETIC target being stoichiometrically inconsistent for this fuel
+# (target H2O/CO2 ~ 1.63; C11H22 yields ~1.0), so H2O cannot be matched. Honest
+# residuals are reported by the calibration script.
+equivalence_ratio: 0.64
+# Inlet air preheat: assumed compressor-discharge temperature. Documented
+# assumption (not a free knob); ~700 K is representative of a moderate-OPR gas
+# turbine compressor exit. Probe temperature is then an INDEPENDENT validation
+# check (emerges from combustion + wall heat loss).
+t_inlet_air_k: 700.0
+inlet_pressure_pa: 185000.0
+
+# Legacy fallback only (used when no fuel is configured, e.g. inert unit tests).
 inlet_composition:
   O2: 0.21
   N2: 0.79
