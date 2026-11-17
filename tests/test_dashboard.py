@@ -151,7 +151,8 @@ def test_pages_render_with_nav_and_missing_files(server):
         code, body = _get(server + path)
         assert code == 200, path
         assert "What changed" in body and "ToDo" in body and "FAA" in body
-    assert "not yet merged" in _get(server + "/paper")[1]                      # no sections in the temp repo
+    body = _get(server + "/paper")[1]                                          # no sections in the temp repo:
+    assert "not yet merged" not in body and "Figure 2" not in body             # absent files give no card
 
 
 def test_decisions_parse_gives_status_and_owner_for_d1():
