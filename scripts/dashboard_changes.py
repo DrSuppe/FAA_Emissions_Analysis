@@ -158,8 +158,9 @@ def fig2_caption(root: Path) -> str:
 
 def render_paper(root: Path) -> str:
     files = fig2_files(root)
-    out = ['<div class="card"><h2>Figure 2: reactor network</h2>']
+    out = []
     if files:
+        out.append('<div class="card"><h2>Figure 2: reactor network</h2>')
         cur = files[0].relative_to(root).as_posix()
         out.append(f'<a href="/img?path={html.escape(cur)}" target="_blank"><img class="fig2" '
                    f'src="/img?path={html.escape(cur)}" alt="{html.escape(files[0].name)}"></a>')
@@ -168,14 +169,15 @@ def render_paper(root: Path) -> str:
             older = " &nbsp; ".join(f'<a href="/img?path={html.escape(p.relative_to(root).as_posix())}" target="_blank">'
                                     f"{html.escape(p.stem.replace('fig2_network_', ''))}</a>" for p in files[1:])
             out.append(f'<p class="note">Older: {older}</p>')
-    else:
-        out.append('<p class="miss">no Figure 2 yet: not yet merged</p>')
-    cap = fig2_caption(root)
-    if cap:
-        out.append(f'<div class="md">{dashboard_md.inline(cap)}</div>')
-    out.append("</div>")
+        cap = fig2_caption(root)
+        if cap:
+            out.append(f'<div class="md">{dashboard_md.inline(cap)}</div>')
+        out.append("</div>")
+    # Cards only for files that exist: the figure folder and the review file are absent until they are made.
     docs = sorted((root / PAPER_SECTIONS).glob("*.md")) + [root / PAPER_REVIEW]
     for p in docs:
+        if not p.is_file():
+            continue
         rel = p.relative_to(root).as_posix() if p.exists() else p.name
         body = dashboard_md.render(p.read_text(encoding="utf-8")) if p.is_file() else '<p class="miss">not yet merged</p>'
         out.append(f'<div class="card"><h2>{html.escape(rel)}</h2><div class="md">{body}</div></div>')

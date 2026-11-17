@@ -3,9 +3,9 @@
 # finding (F-id, optional), status (done | running | draft | waiting). Newest first on the page (date, then time).
 - date: 2026-11-17
   time: "15:30"
-  title: "Project dashboard scaffolded"
-  status: draft
-  summary: "A port of the LNG dashboard for this project: what changed, paper drafts, paper diff against the Overleaf repo, decisions and the task list. Compute, results and the science board come later, when there are results."
+  title: "Project dashboard live on 8771"
+  status: done
+  summary: "A port of the LNG dashboard for this project: what changed, paper drafts, paper diff against the Overleaf repo, decisions and the task list. Verified against the spec (path confinement, read-only paper repo, 10 tests). Compute, results and the science board come later, when there are results."
   links:
     - {label: "spec", path: "docs/specs/dashboard.md"}
     - {label: "decisions", path: "docs/paper_tracking/decisions.md"}
