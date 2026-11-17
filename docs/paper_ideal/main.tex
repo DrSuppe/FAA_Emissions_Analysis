@@ -1,20 +1,110 @@
-% FAA_emissions_paper -- manuscript. Target venue: ASME Turbo Expo 2027 (GT2027), Combustion, Fuels & Emissions.
-% Scope/model source of truth: code repo FAA_Emissions_Analysis. Abstract + deadlines: docs/abstract_GT2027.md
-% TODO: switch \documentclass to the ASME conference class (asmeconf, CTAN/Overleaf) before the Dec 21, 2026 draft.
-\documentclass[11pt]{article}
-\usepackage{graphicx}\graphicspath{{figures/}}
-\usepackage{amsmath,booktabs,siunitx}
+% FAA_emissions_paper: the architect's ideal version of the GT2027 manuscript (docs/paper_ideal/main.tex).
+% The user's live paper is the Overleaf repo (papers/FAA_emissions_paper, read-only here); the dashboard's
+% Paper-diff tab shows the two side by side. Class: asmeconf (CTAN; TeX Live 2022 has it; Overleaf has it).
+% Skeleton 2026-11-17: section outline mapped to the abstract's claims and to decisions D1-D8
+% (docs/paper_tracking/decisions.md). Bracketed notes [..] are instructions to the writer, not text.
+\documentclass[balance,colorlinks]{asmeconf}
+\hypersetup{pdfauthor={Tim Kayser},pdftitle={Gaseous Emissions of Jet A, HEFA-SPK and GTL Solvent at Elevated Fuel Temperatures in a High-Pressure Swirl-Stabilized Combustor: FTIR Measurements and Reactor-Network Inference of In-Chamber Composition}}
+\graphicspath{{figures/}}
+\begin{document}
+\ConfName{Proceedings of ASME Turbo Expo 2027\linebreak Turbomachinery Technical Conference and Exposition}
+\ConfAcronym{GT2027}
+\ConfDate{June 20--25, 2027}
+\ConfCity{Calgary, Alberta, Canada}
+\PaperNo{GT2027-XXXXX} % D8: paper number from the acceptance notice
 \title{Gaseous Emissions of Jet A, HEFA-SPK and GTL Solvent at Elevated Fuel Temperatures in a High-Pressure Swirl-Stabilized Combustor: FTIR Measurements and Reactor-Network Inference of In-Chamber Composition}
-\author{Tim Kayser}
-\begin{document}\maketitle
+\SetAuthors{% D8: author list and order are the user's
+	Tim Kayser\affil{1}\CorrespondingAuthor{tkayser@purdue.edu}
+	}
+\SetAffiliation{1}{School of Aeronautics and Astronautics, Purdue University, West Lafayette, IN}
+\maketitle
+\keywords{Swirl stabilized flames, high-pressure flames, sustainable aviation fuels, heated fuels, gaseous emissions, FTIR, extractive sampling, chemical reactor network}
 \begin{abstract}
 Gaseous emissions of Jet A, HEFA-SPK and a Shell gas-to-liquid (GTL) solvent, GS190, are measured at 1.0 MPa in a piloted, partially premixed, liquid-fueled swirl combustor using extractive sampling and Fourier-transform infrared (FTIR) spectroscopy. Exhaust gas is drawn through a water-cooled blunt-body extractive probe, a heated sample line and a flow-control venturi to the analyzer, where CO\textsubscript{2}, CO, H\textsubscript{2}O, NO, NO\textsubscript{2} and unburned hydrocarbons are quantified at 1 Hz. The test matrix extends the conditions of a companion laser-induced-incandescence study of soot formation in the same combustor: fuel temperatures from approximately 290 K to 590 K at fixed overall equivalence ratio for pilot-and-main operation representative of cruise and for pilot-only operation representative of taxiing and approach, and equivalence-ratio sweeps from 0.36 to 0.61 at fuel temperatures of 366 K, 478 K and 589 K. The results quantify how NO\textsubscript{x}, CO and unburned-hydrocarbon emissions respond to fuel temperature, overall equivalence ratio and fuel aromatic content.
 
 The concentrations reported by the analyzer are not those in the combustion chamber: reactions continue inside the probe and sample line, where NO is partially converted to NO\textsubscript{2} and CO oxidation freezes. To recover the in-chamber composition, the measurements are interpreted with a physics-based chemical-reactor-network model of the combustor and the complete sampling train, built in Cantera with a skeletal Jet A mechanism (HyChem A2) extended with NO\textsubscript{x} chemistry. Measured air and fuel flow rates, inlet conditions and sample-line temperatures constrain the model; the remaining uncertain parameters, zone residence times, air split and wall heat transfer, are calibrated so that the model reproduces the FTIR measurements. The calibrated model then provides composition and temperature at the combustor exit and the fraction of the measured NO\textsubscript{2} that forms in the sampling train rather than in the flame. Inferred combustor-exit NO\textsubscript{x} and CO are reported with uncertainty bounds obtained from a sensitivity analysis of the calibrated parameters. The combination of extractive measurements and reactor-network inference yields emission indices referenced to the combustor rather than the analyzer, enabling direct comparison between fuels, fuel temperatures and equivalence ratios.
 \end{abstract}
+
+\begin{nomenclature}
+\EntryHeading{Roman letters}
+\entry{$\dot m_{\mathrm{air}}$}{combustor air mass flow rate [kg/s]}
+\entry{$\dot m_{f}$}{fuel mass flow rate [kg/s]}
+\entry{EI$_i$}{emission index of species $i$ [g/kg fuel]}
+\entry{$P_3$}{combustor inlet air pressure [MPa]}
+\entry{$T_3$}{combustor inlet air temperature [K]}
+\entry{$T_{\mathrm{fuel}}$}{mass-fraction-weighted average fuel temperature [K]}
+\entry{$\tau$}{reactor residence time [s]}
+\EntryHeading{Greek letters}
+\entry{$\phi_{\mathrm{total}}$}{global equivalence ratio}
+\EntryHeading{Abbreviations}
+\entry{CRN}{chemical reactor network}
+\entry{FTIR}{Fourier-transform infrared spectroscopy}
+\entry{HEFA-SPK}{hydroprocessed esters and fatty acids synthetic paraffinic kerosene}
+\entry{GTL}{gas-to-liquid}
+\entry{PFR}{plug-flow reactor}
+\entry{PSR}{perfectly stirred reactor}
+\entry{UHC}{unburned hydrocarbons}
+\end{nomenclature}
+
 \section{Introduction}
-\section{Methods}
-\section{Results}
+% Claim: why the analyzer composition differs from the chamber; why fuel and fuel temperature matter.
+% [T11 literature, verified before citing]
+% Para 1: aviation emissions regulation (ICAO Annex 16 Vol II; nvPM and gaseous), SAF pathway, aromatics.
+% Para 2: heated fuel as thermal management; prior heated-fuel combustion work (Wiest and Heister 2014; Murdock et al. GT2026).
+% Para 3: extractive sampling standards (SAE ARP1256, ARP1533, ICAO Annex 16 App. 3); known sample-line artifacts:
+%         NO to NO2 conversion, CO freeze, water handling; why these are rarely quantified with uncertainty.
+% Para 4: CRN modelling of GT combustor emissions (Novosselov et al. 2010; Park et al. 2013) and of sampling trains.
+% Para 5: this paper: measurements over the matrix, CRN of combustor plus sampling train, inferred in-chamber composition.
+
+\section{Experimental Methods}
+\subsection{Combustor and Injector}
+% COMRAD: optically accessible, up to 4 MPa / 1000 K; piloted partially premixed swirl injector; pilot and main circuits.
+% Reuse the companion paper's Fig. 1 description; cite Philo et al. for the flow field. [D2: air split from injector effective areas]
+\subsection{Fuels and Fuel Heating}
+% Table 1: Jet A, HEFA-SPK, GS190 (Shell GTL solvent): density, viscosity, distillation, aromatics, H/C. [D7, T5]
+% 81 kW electric fuel heater; nitrogen sparging; residence time to injection.
+\subsection{Extractive Sampling and FTIR}
+% Figure: probe to FTIR schematic with lengths, bores, temperatures. [D3, T3]
+% Water-cooled blunt-body probe with sampling holes; heated stainless line; PTFE section; venturi; FTIR cell T, p; 1 Hz.
+% Species quantified: CO2, CO, H2O, NO, NO2, UHC. Calibration, detection floors, precision (percent of reading plus floor).
+\subsection{Test Matrix}
+% Figure: phi_total vs T_fuel for the three fuels (the 2026-10-11 plot, redrawn). Table 2: conditions per case.
+% Pilot-and-main 1.0 MPa, T3 ~760 K, air 0.59 kg/s, phi ~0.49, pilot split ~30 %; pilot-only 0.53 MPa, phi ~0.28;
+% T_fuel 290-590 K; phi sweeps 0.36-0.61 at 366, 478, 589 K. [D1]
+
+\section{Data Reduction}
+% Wet/dry basis; carbon balance; emission indices per SAE ARP1533 (D6); fuel-air ratio metered vs carbon balance
+% as the probe-representativeness check; measurement uncertainty propagation.
+
+\section{Reactor-Network Model}
+\subsection{Combustor Network}
+% Figure: network diagram (pilot PSR, main PSR, mixing PFR; air split; wall heat loss). [D2]
+% Mechanism: HyChem A2 skeletal with NOx (Saggese et al. 2020; Glarborg et al. 2018) for Jet A; paraffinic surrogate for HEFA and GS190 [D7].
+\subsection{Sampling-Train Network}
+% PFR chain: probe passage, heated line, PTFE, venturi; wall heat transfer by Dittus-Boelter / Gnielinski; pressure drops. [D3]
+% Limitation stated: homogeneous chemistry only; wall-catalysed NO2 reduction and PTFE uptake not modelled (SAE ARP1256). [D4]
+\subsection{Calibration and Sensitivity}
+% Parameters: zone residence times, air split, wall heat transfer, line temperatures. Morris screening; calibration to the
+% FTIR species per case; uncertainty bounds from one-at-a-time sweeps of the ranked parameters. [D5]
+
+\section{Results and Discussion}
+\subsection{Emissions versus Fuel Temperature}
+% Figure: EI NOx, CO, UHC vs T_fuel, pilot-and-main, three fuels. Figure: same for pilot-only.
+\subsection{Emissions versus Equivalence Ratio}
+% Figure: EI NOx, CO, UHC vs phi at 366, 478, 589 K, three fuels.
+\subsection{Fuel Comparison}
+% Fuel effect separated from the stoichiometry effect (H/C, adiabatic flame temperature from the model) and from
+% vaporization (reduced temperature T_fuel / T_boil). Aromatic residual at the highest fuel temperature.
+\subsection{Inferred Combustor-Exit Composition}
+% Figure: measured vs calibrated-model species per case. Figure: sample-line NO2 fraction per condition with bounds.
+% Table: inferred combustor-exit NOx, CO with uncertainty bounds.
+
 \section{Conclusions}
-\bibliographystyle{plain}\bibliography{references}
+% One paragraph per claim of the abstract, in the same order.
+
+\section*{Acknowledgments}
+% FAA ASCENT Project 67, award number [from the companion paper: 13-C-AJFE-PU-038], program managers; fuel suppliers.
+
+\bibliographystyle{asmeconf}
+\bibliography{references}
 \end{document}

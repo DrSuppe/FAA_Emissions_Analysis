@@ -9,7 +9,7 @@
 | T5 | user | open | GS190 datasheet; Jet A and HEFA lot certificates (H/C, aromatics, distillation) | 2026-11-17 | D7 |
 | T6 | user | open | Confirm D1, D4, D5, D6 (proposed) or say what to change | 2026-11-17 | decisions |
 | T7 | CEO | done | Port the dashboard (spec `docs/specs/dashboard.md`), bring it up on 8771 | 2026-11-17 | spec |
-| T8 | CEO | open | Paper skeleton in `docs/paper_ideal/main.tex`: ASME class, section outline mapped to the abstract's claims, figure list | 2026-11-17 | abstract |
+| T8 | CEO | done | Paper skeleton in `docs/paper_ideal/main.tex`: ASME class, section outline mapped to the abstract's claims, figure list | 2026-11-17 | abstract |
 | T9 | CEO | open | Rebuild the model config at COMRAD conditions (after D1-D3), re-enable Jet-A combustion, first forward run | 2026-11-17 | D1-D3 |
 | T10 | CEO | open | Data ingestion spec for the FTIR + station files (after T1) | 2026-11-17 | T1 |
 | T11 | CEO | open | Literature for the Introduction: SAF gaseous emissions at pressure, heated-fuel combustion, sample-line NO/NO2 conversion; verify the recalled sources before citing | 2026-11-17 | abstract |

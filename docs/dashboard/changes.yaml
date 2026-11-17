@@ -2,6 +2,17 @@
 # Fields: date, time, title, summary, numbers [ "label: value" ], table {columns, rows}, links [{label, path}],
 # finding (F-id, optional), status (done | running | draft | waiting). Newest first on the page (date, then time).
 - date: 2026-11-17
+  time: "16:40"
+  title: "Paper skeleton in the ASME class, on the Paper-diff tab"
+  status: draft
+  summary: "docs/paper_ideal/main.tex is now an asmeconf document (GT2027 header, nomenclature, abstract, and every section with a comment saying what goes there and which decision it waits on). The Paper-diff tab shows it against the Overleaf version, which is still the article skeleton. Nothing to copy yet: it is the outline for discussion."
+  numbers:
+    - "sections: Introduction, Experimental Methods (4), Data Reduction, Reactor-Network Model (3), Results (4), Conclusions"
+    - "builds: 2 pages with pdflatex, TeX Live 2022 asmeconf"
+  links:
+    - {label: "main.tex", path: "docs/paper_ideal/main.tex"}
+    - {label: "decisions", path: "docs/paper_tracking/decisions.md"}
+- date: 2026-11-17
   time: "15:30"
   title: "Project dashboard live on 8771"
   status: done
