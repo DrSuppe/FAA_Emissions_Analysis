@@ -1,0 +1,28 @@
+# Curated "What changed" cards, one per merge or result; the architect appends a card on every merge.
+# Fields: date, time, title, summary, numbers [ "label: value" ], table {columns, rows}, links [{label, path}],
+# finding (F-id, optional), status (done | running | draft | waiting). Newest first on the page (date, then time).
+- date: 2026-11-17
+  time: "15:30"
+  title: "Project dashboard scaffolded"
+  status: draft
+  summary: "A port of the LNG dashboard for this project: what changed, paper drafts, paper diff against the Overleaf repo, decisions and the task list. Compute, results and the science board come later, when there are results."
+  links:
+    - {label: "spec", path: "docs/specs/dashboard.md"}
+    - {label: "decisions", path: "docs/paper_tracking/decisions.md"}
+    - {label: "todo", path: "docs/paper_tracking/todo.md"}
+- date: 2026-11-17
+  time: "15:00"
+  title: "GT2027 abstract accepted"
+  status: done
+  summary: "The Turbo Expo 2027 abstract (Combustion, Fuels and Emissions) was accepted. Draft paper due 2026-12-21, final 2027-03-22. The paper repo is the user's Overleaf project; the agent's version of the text lives in docs/paper_ideal here."
+  numbers:
+    - "draft paper due: 2026-12-21"
+    - "final paper due: 2027-03-22"
+    - "abstract: 338 words"
+  links:
+    - {label: "abstract and claims", path: "docs/paper_ideal/main.tex"}
+- date: 2026-10-11
+  time: "21:00"
+  title: "Abstract v3.2 submitted text"
+  status: done
+  summary: "Experiment-led abstract: FTIR emissions of Jet A, HEFA-SPK and GS190 at 1.0 MPa over fuel temperature and equivalence ratio, with a reactor-network model to infer in-chamber composition. The Bayesian inverse method is a later paper."

@@ -1,0 +1,20 @@
+% FAA_emissions_paper -- manuscript. Target venue: ASME Turbo Expo 2027 (GT2027), Combustion, Fuels & Emissions.
+% Scope/model source of truth: code repo FAA_Emissions_Analysis. Abstract + deadlines: docs/abstract_GT2027.md
+% TODO: switch \documentclass to the ASME conference class (asmeconf, CTAN/Overleaf) before the Dec 21, 2026 draft.
+\documentclass[11pt]{article}
+\usepackage{graphicx}\graphicspath{{figures/}}
+\usepackage{amsmath,booktabs,siunitx}
+\title{Gaseous Emissions of Jet A, HEFA-SPK and GTL Solvent at Elevated Fuel Temperatures in a High-Pressure Swirl-Stabilized Combustor: FTIR Measurements and Reactor-Network Inference of In-Chamber Composition}
+\author{Tim Kayser}
+\begin{document}\maketitle
+\begin{abstract}
+Gaseous emissions of Jet A, HEFA-SPK and a Shell gas-to-liquid (GTL) solvent, GS190, are measured at 1.0 MPa in a piloted, partially premixed, liquid-fueled swirl combustor using extractive sampling and Fourier-transform infrared (FTIR) spectroscopy. Exhaust gas is drawn through a water-cooled blunt-body extractive probe, a heated sample line and a flow-control venturi to the analyzer, where CO\textsubscript{2}, CO, H\textsubscript{2}O, NO, NO\textsubscript{2} and unburned hydrocarbons are quantified at 1 Hz. The test matrix extends the conditions of a companion laser-induced-incandescence study of soot formation in the same combustor: fuel temperatures from approximately 290 K to 590 K at fixed overall equivalence ratio for pilot-and-main operation representative of cruise and for pilot-only operation representative of taxiing and approach, and equivalence-ratio sweeps from 0.36 to 0.61 at fuel temperatures of 366 K, 478 K and 589 K. The results quantify how NO\textsubscript{x}, CO and unburned-hydrocarbon emissions respond to fuel temperature, overall equivalence ratio and fuel aromatic content.
+
+The concentrations reported by the analyzer are not those in the combustion chamber: reactions continue inside the probe and sample line, where NO is partially converted to NO\textsubscript{2} and CO oxidation freezes. To recover the in-chamber composition, the measurements are interpreted with a physics-based chemical-reactor-network model of the combustor and the complete sampling train, built in Cantera with a skeletal Jet A mechanism (HyChem A2) extended with NO\textsubscript{x} chemistry. Measured air and fuel flow rates, inlet conditions and sample-line temperatures constrain the model; the remaining uncertain parameters, zone residence times, air split and wall heat transfer, are calibrated so that the model reproduces the FTIR measurements. The calibrated model then provides composition and temperature at the combustor exit and the fraction of the measured NO\textsubscript{2} that forms in the sampling train rather than in the flame. Inferred combustor-exit NO\textsubscript{x} and CO are reported with uncertainty bounds obtained from a sensitivity analysis of the calibrated parameters. The combination of extractive measurements and reactor-network inference yields emission indices referenced to the combustor rather than the analyzer, enabling direct comparison between fuels, fuel temperatures and equivalence ratios.
+\end{abstract}
+\section{Introduction}
+\section{Methods}
+\section{Results}
+\section{Conclusions}
+\bibliographystyle{plain}\bibliography{references}
+\end{document}
