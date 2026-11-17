@@ -39,3 +39,21 @@ Physics-informed combustor-to-FTIR emissions analysis using Cantera.
 - `scripts/run_inference.py` expects JAX + NumPyro (the `inference` extra).
 - The current model is a scientifically structured scaffold (3-zone + line chain) and is designed to be calibrated with your campaign data.
 - For fast code navigation (human + AI), see `docs/module_map.md`.
+
+## Dashboard
+
+Local project dashboard (spec: `docs/specs/dashboard.md`; ported from the LNG project dashboard). Stdlib + PyYAML only.
+
+    python3 scripts/fit_dashboard.py --port 8771      # then open http://127.0.0.1:8771/  (binds 127.0.0.1 only)
+
+| Tab | Route | Reads |
+|---|---|---|
+| What changed | `/` | `docs/dashboard/changes.yaml` (curated cards) and `docs/findings.md` (auto card per row without a card) |
+| Paper | `/paper` | `docs/paper_sections/*.md` |
+| Paper diff | `/paper-diff` | `papers/FAA_emissions_paper` (git-ignored clone, `origin/main`, fetched and read only) vs `docs/paper_ideal/main.tex`; ticks stored in `docs/paper_ideal/checks.json` |
+| Decisions | `/decisions` | `docs/paper_tracking/decisions.md` |
+| ToDo | `/todo` | `docs/paper_tracking/todo.md` |
+
+Every page is rebuilt from the files on each load, so editing a file and reloading is enough; no restart is needed for content changes. `/file?path=` and `/img?path=` serve repo files only (allowed suffixes; paths outside the repo are refused).
+
+Restart (needed only after editing `scripts/*.py`): find the process with `lsof -nP -iTCP:8771 -sTCP:LISTEN`, `kill <PID>`, then start it again from the main checkout with the command above. Tests: `python3 -m pytest tests/test_dashboard.py`.
