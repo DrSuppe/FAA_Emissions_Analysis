@@ -59,3 +59,31 @@ owner: user
 blocks: header of main.tex, dashboard header
 options: user fills `\author{}` in Overleaf and posts the GT number here.
 recommendation: none needed.
+
+## D9 Reactor-network topology for the paper (Stage A)
+status: proposed
+owner: user
+blocks: T9 model rebuild
+options: (a) pilot zone as a 3-bin equivalence-ratio bank of PSRs + main PSR + merged inner/central recirculation PSR with recycle + mixer + burnout PFR + film-air PFR, then the sampling-train chain: 7 combustor reactors, 4 global free parameters (pilot unmixedness S0, S1 linear in fuel temperature; heat-loss scale q; film mixing rate k_f); residence times and recycle from geometry and PIV; film share beta from the carbon balance. (b) same without the pilot bank: 5 reactors, 3 free, likely repeats the June NOx underprediction. (c) the fuller Stage B network now: 11 reactors, 6 free, underdetermined by emissions.
+recommendation: (a) [Medium]; see docs/paper_sections/04_crn_swirl_injector_proposal.md sections 2-3.
+
+## D10 Calibration design: global parameters, held-out cases
+status: proposed
+owner: user
+blocks: results section, abstract wording
+options: (a) calibrate the 4 global parameters on Jet A pilot-and-main at 366 and 589 K only; predict 478 K, HEFA, GS190 and pilot-only without refitting; (b) calibrate on everything and hold out NO only; (c) per-case fits (not identifiable: ~4 informative observables vs 6 unknowns per case).
+recommendation: (a). Consequence: the paper says residence times and air split are fixed from hardware and PIV, and only effective mixing and heat-loss parameters are calibrated; the abstract's "calibrated so that the model reproduces the FTIR measurements" is reworded accordingly in the draft.
+
+## D11 Model-independent sample-line test and the word "inferred"
+status: proposed
+owner: user
+blocks: the sample-line NO2 claim (most exposed claim per the skeptic)
+options: (a) run one fixed operating point with sample-line temperature or venturi flow varied, plus NO and NO2 span gas through the full train; read the NO2/NOx intercept at zero line residence time; keep "inferred in-chamber composition"; (b) no test; the paper says "model-consistent" in-chamber composition and reports bounds.
+recommendation: (a) if rig time exists before camera-ready (March 22); use (b) wording in the December draft regardless [High].
+
+## D12 Provenance and authorship relative to McDonald 2021 / ASCENT reports
+status: open
+owner: user
+blocks: novelty statement in the Introduction
+options: the library found McDonald, AIAA 2021-3480 (NOx, CO, UHC for heated Jet A on this injector at 1-2 MPa) and ASCENT Project 67 reports with a planned journal paper. Are the Jet A and GS190 emissions from that campaign? Is the planned journal paper still planned, and how is authorship split?
+recommendation: answer before the Introduction is drafted; the paper cites McDonald 2021 and differentiates on fuels, pilot-only, phi sweeps, speciated NO2/H2O and the sampling-train model.

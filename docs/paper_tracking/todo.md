@@ -13,3 +13,7 @@
 | T9 | CEO | open | Rebuild the model config at COMRAD conditions (after D1-D3), re-enable Jet-A combustion, first forward run | 2026-11-17 | D1-D3 |
 | T10 | CEO | open | Data ingestion spec for the FTIR + station files (after T1) | 2026-11-17 | T1 |
 | T11 | CEO | open | Literature for the Introduction: SAF gaseous emissions at pressure, heated-fuel combustion, sample-line NO/NO2 conversion; verify the recalled sources before citing | 2026-11-17 | abstract |
+| T12 | user | open | Answer the seven questions in docs/paper_sections/03_science_insights_synthesis.md section 7 (provenance vs McDonald 2021; line test; matching to optical cases; replicates; pilot-only T3; N2O/HC speciation; GS190 curves) | 2026-11-23 | quorum |
+| T13 | user | open | Decisions D9-D12 | 2026-11-23 | CRN proposal |
+| T14 | CEO | open | Model spec docs/specs/crn_stage_a.md from the proposal, after D9/D10; then coder units 1-5 | 2026-11-23 | D9 |
+| T15 | CEO | open | Obtain and read McDonald AIAA 2021-3480 and the ASCENT Project 67 reports; add to references/ and the library | 2026-11-23 | library |

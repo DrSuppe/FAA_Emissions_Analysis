@@ -1,6 +1,25 @@
 # Curated "What changed" cards, one per merge or result; the architect appends a card on every merge.
 # Fields: date, time, title, summary, numbers [ "label: value" ], table {columns, rows}, links [{label, path}],
 # finding (F-id, optional), status (done | running | draft | waiting). Newest first on the page (date, then time).
+- date: 2026-11-23
+  time: "17:30"
+  title: "Quorum results: insights ranking, CRN proposal, paper library"
+  status: done
+  summary: "Eight agents: a literature builder (17 papers on this injector, 14 verified online), three insight voices (experimentalist, chemist, hostile reviewer), two reactor-network voices (literature, physics), and two syntheses. Headline: a 2021 AIAA paper from the group already reports heated-Jet-A NOx/CO/UHC on this injector, so novelty rests on HEFA and GS190, pilot-only, phi sweeps, speciated NO2 with the sampling train, and pairing with the optical data. New decisions D9-D12."
+  numbers:
+    - "library rows: 17 (14 verified, 2 from Murdock refs only, 1 planned paper)"
+    - "insight candidates ranked: top three = vaporization knee, aromatics do not touch gas emissions, pilot-only OH-limited burnout"
+    - "Stage A network: 7 combustor reactors, 4 global free parameters"
+  links:
+    - {label: "insights synthesis", path: "docs/paper_sections/03_science_insights_synthesis.md"}
+    - {label: "CRN proposal", path: "docs/paper_sections/04_crn_swirl_injector_proposal.md"}
+    - {label: "paper library", path: "docs/literature/comrad_library.md"}
+    - {label: "experimentalist", path: "docs/science_board/quorum_01_experimentalist.md"}
+    - {label: "chemist", path: "docs/science_board/quorum_02_chemist.md"}
+    - {label: "skeptic", path: "docs/science_board/quorum_03_skeptic.md"}
+    - {label: "CRN literature", path: "docs/science_board/crn_01_literature.md"}
+    - {label: "CRN physics", path: "docs/science_board/crn_02_physics.md"}
+    - {label: "data request", path: "docs/data_request.md"}
 - date: 2026-11-17
   time: "16:40"
   title: "Paper skeleton in the ASME class, on the Paper-diff tab"
