@@ -42,6 +42,8 @@ Physics-informed combustor-to-FTIR emissions analysis using Cantera.
 
 ## Dashboard
 
+Quickest: `scripts/dashboard_ctl.sh start|stop|status|restart` (log in `logs/dashboard.log`). The server does not survive a reboot or a closed session; run `start` again.
+
 Local project dashboard (spec: `docs/specs/dashboard.md`; ported from the LNG project dashboard). Stdlib + PyYAML only.
 
     python3 scripts/fit_dashboard.py --port 8771      # then open http://127.0.0.1:8771/  (binds 127.0.0.1 only)

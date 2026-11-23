@@ -17,3 +17,5 @@ papers/
 references/*.pdf
 docs/paper_ideal/BASE
 docs/paper_ideal/*.pdf
+logs/
+references/*.txt
